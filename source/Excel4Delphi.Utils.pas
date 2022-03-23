@@ -1,20 +1,41 @@
-﻿unit Excel4Delphi.Utils;
+unit Excel4Delphi.Utils;
 
 interface
 
 uses
-  System.SysUtils, System.UITypes, System.Types, System.Classes, System.Math,
+  System.SysUtils, System.UITypes, System.Types, System.Classes, System.Math, Vcl.Grids,
   Excel4Delphi, Excel4Delphi.Xml, Excel4Delphi.Common;
 
 /// <summary>
 /// Сохраняет страницу TZWorkBook в поток в формате HTML
 /// </summary>
 function SaveXmlssToHtml(sheet: TZSheet; CodePageName: string = 'UTF-8'): string;
+function XlsxToStringGrid( ASheet: TZSheet; AGrid: TStringGrid): Boolean;
 
 implementation
 
 uses
   Excel4Delphi.NumberFormats, System.StrUtils, System.AnsiStrings;
+
+function XlsxToStringGrid( ASheet: TZSheet; AGrid: TStringGrid): Boolean;
+var
+  lRowCount, lColCount, lRowActive, lColActive: Integer;
+begin
+  lRowCount       := ASheet.RowCount;
+  lColCount       := ASheet.ColCount;
+  AGrid.FixedCols := 0;
+  AGrid.FixedRows := 1;
+  AGrid.RowCount  := lRowCount;
+  AGrid.ColCount  := lColCount;
+
+  lRowActive      := 1;
+  repeat
+    for lColActive := 1 to lColCount do
+      AGrid.Cells[(lColActive - 1), (lRowActive - 1)] := ASheet.Cell[(lColActive - 1), (lRowActive - 1)].AsString;
+    Inc(lRowActive, 1);
+  until lRowActive > lRowCount;
+  Result := True;
+end;
 
 function SaveXmlssToHtml(sheet: TZSheet; CodePageName: string = 'UTF-8'): string;
 var
