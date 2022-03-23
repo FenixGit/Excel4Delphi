@@ -3,7 +3,7 @@
 	"description": "Read, Write excel 2002/2003 XML (SpreadsheetML / XML Spreadsheet) library",
 	"version": "1.0.0",
 	"homepage": "",
-	"mainsrc": "source",
+	"mainsrc": "source/",
 	"projects": [],
 	"dependencies": {}
 }
